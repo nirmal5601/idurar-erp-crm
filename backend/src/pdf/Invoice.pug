@@ -281,6 +281,9 @@ html
               .col.col-8 
                 p.strong #{translate('Number')} :
                 p # #{model.number}/#{model.year || ""} 
+              .col.col-8 
+                p.strong #{translate('Notes')} :
+                p #{model.notes}
               
         .right.col-10
             .billTo
