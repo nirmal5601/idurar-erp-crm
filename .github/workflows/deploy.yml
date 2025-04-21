@@ -3,7 +3,7 @@ name: Deploy Full Stack App
 on:
   push:
     branches:
-      - main  # Trigger on pushes to the `main` branch. You can change this if needed.
+      - feature/gemini-integration  # Trigger on pushes to the `main` branch. You can change this if needed.
  
 jobs:
   deploy:
@@ -39,13 +39,13 @@ jobs:
  
             # Clone or navigate to app directory
             if [ ! -d "$APP_DIR" ]; then
-              git clone https://github.com/BharathkumarRG/APP-cicd.git $APP_DIR  # Replace with your actual repo URL
+              git clone https://github.com/nirmal5601/idurar-erp-crm.git $APP_DIR  # Replace with your actual repo URL
             fi
  
             cd $APP_DIR
  
-            # Pull latest code from main branch
-            git pull origin main
+            # Pull latest code from feature/gemini-integration branch
+            git pull origin feature/gemini-integration
  
             # Use docker compose v2 (updated command)
             docker compose down
