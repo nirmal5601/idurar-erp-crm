@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Button, Drawer, Layout, Menu } from 'antd';
-
+ 
 import { useAppContext } from '@/context/appContext';
-
+ 
 import useLanguage from '@/locale/useLanguage';
 import logoIcon from '@/style/images/logo-icon.svg';
 import logoText from '@/style/images/logo-text.svg';
-
+ 
 import useResponsive from '@/hooks/useResponsive';
-
+ 
 import {
   SettingOutlined,
   CustomerServiceOutlined,
@@ -27,27 +27,27 @@ import {
   WalletOutlined,
   ReconciliationOutlined,
 } from '@ant-design/icons';
-
+ 
 const { Sider } = Layout;
-
+ 
 export default function Navigation() {
   const { isMobile } = useResponsive();
-
+ 
   return isMobile ? <MobileSidebar /> : <Sidebar collapsible={false} />;
 }
-
+ 
 function Sidebar({ collapsible, isMobile = false }) {
   let location = useLocation();
-
+ 
   const { state: stateApp, appContextAction } = useAppContext();
   const { isNavMenuClose } = stateApp;
   const { navMenu } = appContextAction;
   const [showLogoApp, setLogoApp] = useState(isNavMenuClose);
   const [currentPath, setCurrentPath] = useState(location.pathname.slice(1));
-
+ 
   const translate = useLanguage();
   const navigate = useNavigate();
-
+ 
   const items = [
     {
       key: 'dashboard',
@@ -59,7 +59,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <CustomerServiceOutlined />,
       label: <Link to={'/customer'}>{translate('customers')}</Link>,
     },
-
+ 
     {
       key: 'invoice',
       icon: <ContainerOutlined />,
@@ -67,15 +67,20 @@ function Sidebar({ collapsible, isMobile = false }) {
     },
     {
       key: 'quote',
-      icon: <FileSyncOutlined />,
+      icon: <ContainerOutlined />,
       label: <Link to={'/quote'}>{translate('quote')}</Link>,
+    },
+    {
+      key: 'query',
+      icon: <FileSyncOutlined />,
+      label: <Link to={'/query'}>{translate('query')}</Link>,
     },
     {
       key: 'payment',
       icon: <CreditCardOutlined />,
       label: <Link to={'/payment'}>{translate('payments')}</Link>,
     },
-
+ 
     {
       key: 'paymentMode',
       label: <Link to={'/payment/mode'}>{translate('payments_mode')}</Link>,
@@ -97,7 +102,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       icon: <ReconciliationOutlined />,
     },
   ];
-
+ 
   useEffect(() => {
     if (location)
       if (currentPath !== location.pathname) {
@@ -106,7 +111,7 @@ function Sidebar({ collapsible, isMobile = false }) {
         } else setCurrentPath(location.pathname.slice(1));
       }
   }, [location, currentPath]);
-
+ 
   useEffect(() => {
     if (isNavMenuClose) {
       setLogoApp(isNavMenuClose);
@@ -121,7 +126,7 @@ function Sidebar({ collapsible, isMobile = false }) {
   const onCollapse = () => {
     navMenu.collapse();
   };
-
+ 
   return (
     <Sider
       collapsible={collapsible}
@@ -132,7 +137,7 @@ function Sidebar({ collapsible, isMobile = false }) {
       style={{
         overflow: 'auto',
         height: '100vh',
-
+ 
         position: isMobile ? 'absolute' : 'relative',
         bottom: '20px',
         ...(!isMobile && {
@@ -152,7 +157,7 @@ function Sidebar({ collapsible, isMobile = false }) {
         }}
       >
         <img src={logoIcon} alt="Logo" style={{ marginLeft: '-5px', height: '40px' }} />
-
+ 
         {!showLogoApp && (
           <img
             src={logoText}
@@ -177,7 +182,7 @@ function Sidebar({ collapsible, isMobile = false }) {
     </Sider>
   );
 }
-
+ 
 function MobileSidebar() {
   const [visible, setVisible] = useState(false);
   const showDrawer = () => {
@@ -186,7 +191,7 @@ function MobileSidebar() {
   const onClose = () => {
     setVisible(false);
   };
-
+ 
   return (
     <>
       <Button

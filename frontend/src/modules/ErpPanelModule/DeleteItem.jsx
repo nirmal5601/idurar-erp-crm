@@ -10,7 +10,7 @@ import { valueByString } from '@/utils/helpers';
 export default function Delete({ config }) {
   let {
     entity,
-    deleteModalLabels,
+    deleteModalLabels = [],
     deleteMessage = 'Do you want delete : ',
     modalTitle = 'Remove Item',
   } = config;
