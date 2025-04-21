@@ -336,6 +336,7 @@ const lang = {
   add_new_lead: 'Add New Lead',
   source: 'Source',
   notes: 'Notes',
+  note: 'Note',
   new: 'New',
   in_negociation: 'In Negociation',
   won: 'Won',
