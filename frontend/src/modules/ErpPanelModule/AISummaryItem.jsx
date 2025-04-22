@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
-import { Divider } from 'antd';
+import { useNavigate } from 'react-router-dom';
+import { generate as uniqueId } from 'shortid';
+import { useSelector, useDispatch } from 'react-redux';
+import { Button, Row, Col, Divider} from 'antd';
 
-import { Button, Row, Col, Descriptions, Statistic, Tag } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
 import {
   EditOutlined,
@@ -11,61 +13,15 @@ import {
   MailOutlined,
 } from '@ant-design/icons';
 
-import { useSelector, useDispatch } from 'react-redux';
-import useLanguage from '@/locale/useLanguage';
 import { erp } from '@/redux/erp/actions';
-
-import { generate as uniqueId } from 'shortid';
-
 import { selectCurrentItem } from '@/redux/erp/selectors';
 
-import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
-import { useMoney, useDate } from '@/settings';
-import useMail from '@/hooks/useMail';
-import { useNavigate } from 'react-router-dom';
+import useLanguage from '@/locale/useLanguage';
 
-const Item = ({ item, currentErp }) => {
-  const { moneyFormatter } = useMoney();
-  return (
-    <Row gutter={[12, 0]} key={item._id}>
-      <Col className="gutter-row" span={11}>
-        <p style={{ marginBottom: 5 }}>
-          <strong>{item.itemName}</strong>
-        </p>
-        <p>{item.description}</p>
-      </Col>
-      <Col className="gutter-row" span={4}>
-        <p
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          {moneyFormatter({ amount: item.price, currency_code: currentErp.currency })}
-        </p>
-      </Col>
-      <Col className="gutter-row" span={4}>
-        <p
-          style={{
-            textAlign: 'right',
-          }}
-        >
-          {item.quantity}
-        </p>
-      </Col>
-      <Col className="gutter-row" span={5}>
-        <p
-          style={{
-            textAlign: 'right',
-            fontWeight: '700',
-          }}
-        >
-          {moneyFormatter({ amount: item.total, currency_code: currentErp.currency })}
-        </p>
-      </Col>
-      <Divider dashed style={{ marginTop: 0, marginBottom: 15 }} />
-    </Row>
-  );
-};
+import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
+import { useMoney } from '@/settings';
+import useMail from '@/hooks/useMail';
+
 
 export default function AISummaryItem({ config, selectedItem }) {
   const translate = useLanguage();
@@ -73,7 +29,6 @@ export default function AISummaryItem({ config, selectedItem }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { moneyFormatter } = useMoney();
   const { send, isLoading: mailInProgress } = useMail({ entity });
 
   const { result: currentResult } = useSelector(selectCurrentItem);
@@ -95,38 +50,19 @@ export default function AISummaryItem({ config, selectedItem }) {
     year: 0,
   };
 
-  const [itemslist, setItemsList] = useState([]);
   const [currentErp, setCurrentErp] = useState(selectedItem ?? resetErp);
-  const [client, setClient] = useState({});
 
   useEffect(() => {
     if (currentResult) {
       const { items, invoice, ...others } = currentResult;
-
-      // Safely handle items - fallback to empty array if undefined
-      if (items && Array.isArray(items)) {
-        setItemsList(items);
-      } else if (invoice?.items && Array.isArray(invoice.items)) {
-        setItemsList(invoice.items);
-      } else {
-        setItemsList([]); // Fallback to empty array if no items are found
-      }
-
-      // Update other state as needed
       setCurrentErp((prevErp) => ({ ...prevErp, ...others }));
     }
 
     return () => {
-      setItemsList([]);  // Reset items on cleanup
-      setCurrentErp(resetErp);  // Reset ERP data
+      setCurrentErp(resetErp); 
     };
   }, [currentResult]);
 
-  useEffect(() => {
-    if (currentErp?.client) {
-      setClient(currentErp.client);
-    }
-  }, [currentErp]);
 
   return (
     <>
@@ -134,13 +70,13 @@ export default function AISummaryItem({ config, selectedItem }) {
         onBack={() => {
           navigate(`/${entity.toLowerCase()}`);
         }}
-        title={`${ENTITY_NAME} # ${currentErp.number}/${currentErp.year || ''}`}
+        title={`${ENTITY_NAME} # ${currentErp?.number}/${currentErp?.year || ''}`}
         ghost={false}
         tags={[
-          <span key="status">{currentErp.status && translate(currentErp.status)}</span>,
-          currentErp.paymentStatus && (
+          <span key="status">{currentErp?.status && translate(currentErp.status)}</span>,
+          currentErp?.paymentStatus && (
             <span key="paymentStatus">
-              {currentErp.paymentStatus && translate(currentErp.paymentStatus)}
+              {currentErp?.paymentStatus && translate(currentErp.paymentStatus)}
             </span>
           ),
         ]}
@@ -158,7 +94,7 @@ export default function AISummaryItem({ config, selectedItem }) {
             key={`${uniqueId()}`}
             onClick={() => {
               window.open(
-                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp._id}.pdf`,
+                `${DOWNLOAD_BASE_URL}${entity}/${entity}-${currentErp?._id}.pdf`,
                 '_blank'
               );
             }}
@@ -170,7 +106,7 @@ export default function AISummaryItem({ config, selectedItem }) {
             key={`${uniqueId()}`}
             loading={mailInProgress}
             onClick={() => {
-              send(currentErp._id);
+              send(currentErp?._id);
             }}
             icon={<MailOutlined />}
           >
@@ -179,7 +115,7 @@ export default function AISummaryItem({ config, selectedItem }) {
           <Button
             key={`${uniqueId()}`}
             onClick={() => {
-              dispatch(erp.convert({ entity, id: currentErp._id }));
+              dispatch(erp.convert({ entity, id: currentErp?._id }));
             }}
             icon={<RetweetOutlined />}
             style={{ display: entity === 'quote' ? 'inline-block' : 'none' }}
@@ -196,7 +132,7 @@ export default function AISummaryItem({ config, selectedItem }) {
                   data: currentErp,
                 })
               );
-              navigate(`/${entity.toLowerCase()}/update/${currentErp._id}`);
+              navigate(`/${entity.toLowerCase()}/update/${currentErp?._id}`);
             }}
             type="primary"
             icon={<EditOutlined />}
@@ -210,10 +146,29 @@ export default function AISummaryItem({ config, selectedItem }) {
       >
       </PageHeader>
       <Divider dashed />
-      {/* Render Items List */}
-      {itemslist.map((item) => (
-        <Item key={item._id} item={item} currentErp={currentErp} />
-      ))}
+
+      <Row>
+        <Col span={24}>
+          <h2 style={{ fontWeight: 'bold', color: '#4c8bf5' }}>{translate('AI Summary')}</h2>
+          <pre
+            style={{
+              backgroundColor: '#f5f5f5',
+              padding: '15px',
+              borderRadius: '5px',
+              fontSize: '14px',
+              overflowX: 'auto',
+              whiteSpace: 'pre-wrap',
+              wordWrap: 'break-word',
+              boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+            }}
+          >
+            {currentErp?.aiSummary ? currentErp.aiSummary : 'No AI summary available'}
+          </pre>
+          <p style={{ fontStyle: 'italic', color: '#888' }}>
+            {translate('This is the generated AI summary based on the current data.')}
+          </p>
+        </Col>
+      </Row>
     </>
   );
 }
