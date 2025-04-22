@@ -1,16 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Row, Col, Select, Input, Form, Button, message } from 'antd';
-import { v4 as uuidv4 } from 'uuid';
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 import AutoCompleteAsync from '@/components/AutoCompleteAsync';
 import useLanguage from '@/locale/useLanguage';
 
 export default function QueryForm({ current = null, form, onSubmit }) {
   const translate = useLanguage();
-  const [notes, setNotes] = useState([{ id: uuidv4(), content: '' }]);
+  const [notes, setNotes] = useState([{ id: null, content: '' }]);
 
   const addNoteField = () => {
-    setNotes((prevNotes) => [...prevNotes, { id: uuidv4(), content: '' }]);
+    setNotes((prevNotes) => [...prevNotes, { id: null, content: '' }]);
   };
 
   const handleNoteChange = (value, index) => {
@@ -30,12 +29,14 @@ export default function QueryForm({ current = null, form, onSubmit }) {
 
   useEffect(() => {
     if (form && current) {
+
       form.setFieldsValue({
         status: current?.status || 'Open',
         ...current,
-        notes: current?.notes || [{ id: uuidv4(), content: '' }],
+        notes: current?.notes || [{ id: null, content: '' }], 
       });
-      setNotes(current?.notes || [{ id: uuidv4(), content: '' }]);
+
+      setNotes(current?.notes || [{ id: null, content: '' }]);
     }
   }, [current, form]);
 
