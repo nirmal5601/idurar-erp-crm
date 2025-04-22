@@ -298,5 +298,19 @@ const request = {
       return errorHandler(error);
     }
   },
+
+  aiSummary: async ({ entity, id }) => {
+    try {
+      includeToken();
+      const response = await axios.get(entity + '/aisummary/' + id);
+      successHandler(response, {
+        notifyOnSuccess: false,
+        notifyOnFailed: true,
+      });
+      return response.data;
+    } catch (error) {
+      return errorHandler(error);
+    }
+  },
 };
 export default request;

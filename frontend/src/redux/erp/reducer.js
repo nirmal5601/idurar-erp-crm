@@ -1,5 +1,5 @@
 import * as actionTypes from './types';
-
+ 
 const INITIAL_STATE = {
   current: {
     result: null,
@@ -65,11 +65,17 @@ const INITIAL_STATE = {
     isLoading: false,
     isSuccess: false,
   },
+  aiSummary: {
+    result: null,
+    current: null,
+    isLoading: false,
+    isSuccess: false,
+  },
 };
-
+ 
 const erpReducer = (state = INITIAL_STATE, action) => {
   const { payload, keyState } = action;
-
+ 
   switch (action.type) {
     case actionTypes.RESET_STATE:
       return INITIAL_STATE;
@@ -125,5 +131,5 @@ const erpReducer = (state = INITIAL_STATE, action) => {
       return state;
   }
 };
-
+ 
 export default erpReducer;
