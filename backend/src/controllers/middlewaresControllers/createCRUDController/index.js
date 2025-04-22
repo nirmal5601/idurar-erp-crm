@@ -9,6 +9,7 @@ const remove = require('./remove');
 const search = require('./search');
 const filter = require('./filter');
 const summary = require('./summary');
+const aisummary = require('@/controllers/appControllers/invoiceController/aiSummary');
 const listAll = require('./listAll');
 const paginatedList = require('./paginatedList');
 
@@ -28,6 +29,7 @@ const createCRUDController = (modelName) => {
     search: (req, res) => search(Model, req, res),
     filter: (req, res) => filter(Model, req, res),
     summary: (req, res) => summary(Model, req, res),
+    aisummary: (req, res) => aisummary(Model, req, res),
   };
   return crudMethods;
 };

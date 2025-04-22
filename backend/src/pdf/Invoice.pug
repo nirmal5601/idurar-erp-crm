@@ -281,6 +281,9 @@ html
               .col.col-8 
                 p.strong #{translate('Number')} :
                 p # #{model.number}/#{model.year || ""} 
+              .col.col-8 
+                p.strong #{translate('Notes')} :
+                p #{model.notes}
               
         .right.col-10
             .billTo
@@ -299,6 +302,7 @@ html
               th #{translate('Quantity')}
               th #{translate('PRICE')}
               th #{translate('TOTAL')}
+              th #{translate('Note')}
           tbody
             each item in model.items
               tr
@@ -307,6 +311,7 @@ html
                 td.qty #{item.quantity}  
                 td.unit  #{moneyFormatter({amount:item.price})}
                 td.total #{moneyFormatter({amount:item.total})}
+                td.qty #{item.note}
             tr
               td(colspan='3') #{translate('SUB TOTAL')}
               td.total #{moneyFormatter({amount:model.subTotal})}

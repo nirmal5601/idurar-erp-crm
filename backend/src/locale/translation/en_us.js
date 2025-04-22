@@ -232,6 +232,7 @@ module.exports = {
   number: 'Number',
   client: 'Client',
   total: 'Total',
+  note: 'Note',
   status: 'Status',
   invoices_preview: 'Invoices Preview',
   quotes_preview: 'Quotes Preview',

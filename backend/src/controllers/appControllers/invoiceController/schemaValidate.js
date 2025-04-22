@@ -17,10 +17,12 @@ const schema = Joi.object({
         quantity: Joi.number().required(),
         price: Joi.number().required(),
         total: Joi.number().required(),
+        note: Joi.string().optional()
       }).required()
     )
     .required(),
   taxRate: Joi.alternatives().try(Joi.number(), Joi.string()).required(),
+  aiSummary: Joi.string().optional(),
 });
 
 module.exports = schema;
