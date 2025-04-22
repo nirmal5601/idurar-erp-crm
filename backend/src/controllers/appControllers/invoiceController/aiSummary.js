@@ -1,14 +1,17 @@
-const mongoose = require('mongoose');
 const axios = require('axios');
-require('dotenv').config();
+const mongoose = require('mongoose');
 const Model = mongoose.model('Invoice');
+require('dotenv').config();
 
 const findAIDocument = async (req, res) => {
   try {
+
     const result = await Model.findOne({
       _id: req.params.id,
       removed: false,
-    })
+    }).populate('client')
+      .populate('createdBy', 'name')
+      .exec();
 
     if (!result) {
       return res.status(404).json({
@@ -21,9 +24,10 @@ const findAIDocument = async (req, res) => {
     const summarytext = summary?.candidates?.[0]?.content?.parts?.[0]?.text || "No summary available"
     result.aiSummary = summarytext;
     await result.save();
+
     return res.status(200).json({
       success: true,
-      result: summarytext,
+      result,
       message: 'AI summary generated successfully',
     });
 
