@@ -325,7 +325,18 @@ html
       .col.col-24
           .space     
       footer.footer-invoice
-        //- | Invoice was created on a computer and is valid without the signature and seal.
-          
+div.ai-summary-section(style="margin-top: 20px;")
+  h2(style="color: #52008c; font-size: 24px; margin-bottom: 15px;") AI Summary
+  p(style="font-size: 14px; line-height: 1.6; color: #333; text-align: justify;")
+    Below is a structured summary of the items provided by the AI, parsed dynamically:
+
+  div#ai-summary-content(style="background-color: #f4f4f4; padding: 15px; border-radius: 5px; font-size: 12px; overflow-x: auto; white-space: pre-wrap; word-wrap: break-word;")
+    if model.aiSummary && model.aiSummary.trim() != ''
+      pre(style="background-color: #fff; padding: 10px; border-radius: 5px; white-space: pre-wrap; word-wrap: break-word;")
+        | #{model.aiSummary}
+    else
+      p No AI summary data available.
+
+
 
    
