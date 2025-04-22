@@ -1,7 +1,5 @@
 import dayjs from 'dayjs';
-import { Tag } from 'antd';
 import useLanguage from '@/locale/useLanguage';
-import { tagColor } from '@/utils/statusTagColor';
 
 import { useMoney, useDate } from '@/settings';
 import InvoiceDataTableModule from '@/modules/InvoiceModule/InvoiceDataTableModule';
@@ -78,10 +76,6 @@ export default function Invoice() {
     {
       title: translate('Payment'),
       dataIndex: 'paymentStatus',
-    },
-    {
-      title: translate('Notes'),
-      dataIndex: 'notes',
     },
   ];
 

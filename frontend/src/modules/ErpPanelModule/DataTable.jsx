@@ -105,6 +105,26 @@ export default function DataTable({ config, extra = [] }) {
     navigate(`/invoice/pay/${record._id}`);
   };
 
+  const fetchAISummary = (record)=>{
+    dispatch(erp.currentItem({ data: record }));
+    navigate(`/${entity}/aisummary/${record._id}`);
+  }
+
+  if (entity === 'invoice') {
+    dataTableColumns = [
+      ...dataTableColumns,
+      {
+        title: translate('AI Summary'),
+        key: 'aiSummary',
+        render: (_, record) => (
+          <Button type="primary" onClick={() => fetchAISummary(record)}>
+            Get AI Summary
+          </Button>
+        ),
+      },
+    ];
+  }
+
   dataTableColumns = [
     ...dataTableColumns,
     {
@@ -135,15 +155,11 @@ export default function DataTable({ config, extra = [] }) {
                 default:
                   break;
               }
-              // else if (key === '2')handleCloseTask
             },
           }}
           trigger={['click']}
         >
-          <EllipsisOutlined
-            style={{ cursor: 'pointer', fontSize: '24px' }}
-            onClick={(e) => e.preventDefault()}
-          />
+          <EllipsisOutlined style={{ cursor: 'pointer', fontSize: '24px' }} onClick={(e) => e.preventDefault()} />
         </Dropdown>
       ),
     },

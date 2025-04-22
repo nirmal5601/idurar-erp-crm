@@ -1,6 +1,6 @@
 import * as actionTypes from './types';
 import { request } from '@/request';
-
+ 
 export const erp = {
   resetState: () => (dispatch) => {
     dispatch({
@@ -41,9 +41,9 @@ export const erp = {
         keyState: 'list',
         payload: null,
       });
-
+ 
       let data = await request.list({ entity, options });
-
+ 
       if (data.success === true) {
         const result = {
           items: data.result,
@@ -74,9 +74,9 @@ export const erp = {
         keyState: 'create',
         payload: null,
       });
-
+ 
       let data = await request.create({ entity, jsonData });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,
@@ -103,9 +103,9 @@ export const erp = {
         keyState: 'recordPayment',
         payload: null,
       });
-
+ 
       let data = await request.create({ entity, jsonData });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,
@@ -132,9 +132,9 @@ export const erp = {
         keyState: 'read',
         payload: null,
       });
-
+ 
       let data = await request.read({ entity, id });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.CURRENT_ITEM,
@@ -161,9 +161,9 @@ export const erp = {
         keyState: 'update',
         payload: null,
       });
-
+ 
       let data = await request.update({ entity, id, jsonData });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,
@@ -182,7 +182,7 @@ export const erp = {
         });
       }
     },
-
+ 
   delete:
     ({ entity, id }) =>
     async (dispatch) => {
@@ -195,9 +195,9 @@ export const erp = {
         keyState: 'delete',
         payload: null,
       });
-
+ 
       let data = await request.delete({ entity, id });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,
@@ -212,7 +212,7 @@ export const erp = {
         });
       }
     },
-
+ 
   search:
     ({ entity, options }) =>
     async (dispatch) => {
@@ -221,9 +221,9 @@ export const erp = {
         keyState: 'search',
         payload: null,
       });
-
+ 
       let data = await request.search({ entity, options });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,
@@ -238,7 +238,7 @@ export const erp = {
         });
       }
     },
-
+ 
   summary:
     ({ entity, options }) =>
     async (dispatch) => {
@@ -247,9 +247,9 @@ export const erp = {
         keyState: 'summary',
         payload: null,
       });
-
+ 
       const data = await request.summary({ entity, options });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,
@@ -264,7 +264,7 @@ export const erp = {
         });
       }
     },
-
+ 
   mail:
     ({ entity, jsonData }) =>
     async (dispatch) => {
@@ -273,9 +273,9 @@ export const erp = {
         keyState: 'mail',
         payload: null,
       });
-
+ 
       const data = await request.mail({ entity, jsonData });
-
+ 
       if (data.success === true) {
         dispatch({
           type: actionTypes.REQUEST_SUCCESS,
@@ -290,10 +290,40 @@ export const erp = {
         });
       }
     },
-
+ 
   convert:
     ({ entity, id }) =>
     async () => {
       await request.convert({ entity, id });
+    },
+ 
+  aiSummary:
+    ({ entity, id }) =>
+    async (dispatch) => {
+      dispatch({
+        type: actionTypes.REQUEST_LOADING,
+        keyState: 'aiSummary',
+        payload: null,
+      });
+ 
+      let data = await request.aiSummary({ entity, id });
+ 
+      if (data.success === true) {
+        dispatch({
+          type: actionTypes.CURRENT_ITEM,
+          payload: data.result,
+        });
+        dispatch({
+          type: actionTypes.REQUEST_SUCCESS,
+          keyState: 'aiSummary',
+          payload: data.result,
+        });
+      } else {
+        dispatch({
+          type: actionTypes.REQUEST_FAILED,
+          keyState: 'aiSummary',
+          payload: null,
+        });
+      }
     },
 };
