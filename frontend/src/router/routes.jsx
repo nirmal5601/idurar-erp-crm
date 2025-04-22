@@ -13,6 +13,7 @@ const InvoiceCreate = lazy(() => import('@/pages/Invoice/InvoiceCreate'));
 const InvoiceRead = lazy(() => import('@/pages/Invoice/InvoiceRead'));
 const InvoiceUpdate = lazy(() => import('@/pages/Invoice/InvoiceUpdate'));
 const InvoiceRecordPayment = lazy(() => import('@/pages/Invoice/InvoiceRecordPayment'));
+const InvoiceAISummary = lazy(() => import('@/pages/Invoice/InvoiceAISummary'));
 const Quote = lazy(() => import('@/pages/Quote/index'));
 const QuoteCreate = lazy(() => import('@/pages/Quote/QuoteCreate'));
 const QuoteRead = lazy(() => import('@/pages/Quote/QuoteRead'));
@@ -68,6 +69,10 @@ let routes = {
     {
       path: '/invoice/read/:id',
       element: <InvoiceRead />,
+    },
+    {
+      path: '/invoice/aisummary/:id',
+      element: <InvoiceAISummary />,
     },
     {
       path: '/invoice/update/:id',
