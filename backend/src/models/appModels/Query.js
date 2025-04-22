@@ -1,4 +1,19 @@
 const mongoose = require('mongoose');
+const noteSchema = new mongoose.Schema({
+  content: {
+    type: String,
+    required: true,
+    trim: true,
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now,
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Admin',
+  },
+});
 
 const querySchema = new mongoose.Schema({
   client: {
@@ -20,20 +35,26 @@ const querySchema = new mongoose.Schema({
     enum: ['Open', 'InProgress', 'Closed'],
     default: 'Open',
   },
+  notes: [noteSchema],
+  aiSummary: {
+    type: String,
+    trim: true,
+  },
   createdAt: {
     type: Date,
     default: Date.now,
-  },
-  removed: {
-    type: Boolean,
-    default: false,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Admin',
   },
+
+  removed: {
+    type: Boolean,
+    default: false,
+  },
 });
 
-const Query = mongoose.model('Query', querySchema);
+const Query = mongoose.models.Query || mongoose.model('Query', querySchema);
 
 module.exports = Query;

@@ -30,6 +30,8 @@ const createCRUDController = (modelName) => {
     filter: (req, res) => filter(Model, req, res),
     summary: (req, res) => summary(Model, req, res),
     aisummary: (req, res) => aisummary(Model, req, res),
+    addNote: (req, res) => {},
+    removeNote: (req, res) => {},
   };
   return crudMethods;
 };

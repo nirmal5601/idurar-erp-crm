@@ -1,16 +1,15 @@
-import NotFound from '@/components/NotFound';
+import { useSelector } from 'react-redux';
+
 import { ErpLayout } from '@/layout';
 
+import NotFound from '@/components/NotFound';
 import PageLoader from '@/components/PageLoader';
-import { selectAISummaryItem } from '@/redux/erp/selectors';
-import { useDispatch, useSelector } from 'react-redux';
 
-import { useParams } from 'react-router-dom';
+import { selectAISummaryItem } from '@/redux/erp/selectors';
+
 import AISummaryItem from '@/modules/ErpPanelModule/AISummaryItem';
 
 export default function AISummaryInvoiceModule({ config }) {
-  const dispatch = useDispatch();
-  const { id } = useParams();
 
   const { result: currentResult, isSuccess, isLoading = true } = useSelector(selectAISummaryItem);
 

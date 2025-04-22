@@ -24,6 +24,11 @@ const routerApp = (entity, controller) => {
   if (entity === 'quote') {
     router.route(`/${entity}/convert/:id`).get(catchErrors(controller['convert']));
   }
+
+  if (entity === 'query') {
+    router.route(`/${entity}/:id/notes`).post(catchErrors(controller['addNote']));
+    router.route(`/${entity}/:id/notes/:noteId`).delete(catchErrors(controller['removeNote']));
+  }
 };
 
 routesList.forEach(({ entity, controllerName }) => {

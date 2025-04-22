@@ -1,33 +1,42 @@
 const mongoose = require('mongoose');
+
 const Model = mongoose.model('Query');
 
 const remove = async (req, res) => {
-  const deletedQuery = await Model.findOneAndUpdate(
-    {
-      _id: req.params.id,
-      removed: { $ne: true },
-    },
-    {
-      $set: {
-        removed: true,
+  try {
+    const deletedQuery = await Model.findOneAndUpdate(
+      {
+        _id: req.params.id,
+        removed: false,
       },
-    },
-    { new: true }
-  ).exec();
+      {
+        $set: { removed: true },
+      },
+      { new: true }
+    ).exec();
 
-  if (!deletedQuery) {
-    return res.status(404).json({
+    if (!deletedQuery) {
+      return res.status(404).json({
+        success: false,
+        result: null,
+        message: 'Query not found',
+      });
+    }
+
+
+    return res.status(200).json({
+      success: true,
+      result: deletedQuery,
+      message: 'Query deleted successfully',
+    });
+  } catch (error) {
+    return res.status(400).json({
       success: false,
       result: null,
-      message: 'Query not found or already deleted',
+      message: 'Failed to delete query',
+      error,
     });
   }
-
-  return res.status(200).json({
-    success: true,
-    result: deletedQuery,
-    message: 'Query deleted successfully',
-  });
 };
 
 module.exports = remove;

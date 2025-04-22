@@ -1,48 +1,65 @@
 const mongoose = require('mongoose');
 const Model = mongoose.model('Query');
-const querySchema = require('./schema'); // Reuse the shared Joi schema
+const { increaseBySettingKey } = require('@/middlewares/settings');
+const querySchema = require('./schema');
 
 const update = async (req, res) => {
-  // Validate the request body
-  const { error, value } = querySchema.validate(req.body, { allowUnknown: false });
+  let body = req.body;
+  if (Array.isArray(body.notes)) {
+    body["notes"] = body.notes.map((note) => ({
+      content: note.content,
+      createdAt: new Date(),
+      createdBy: req.admin?._id,
+    }));
+  }
+
+  const { error, value } = querySchema.validate(body, { allowUnknown: false });
   if (error) {
     const { details } = error;
     return res.status(400).json({
       success: false,
       result: null,
       message: details[0]?.message,
-    });
+    }); 
   }
 
-  // Normalize client if it's an object
   if (typeof value.client === 'object' && value.client._id) {
     value.client = value.client._id;
   }
 
+  body = {
+    ...value,
+    updatedBy: req.admin?._id,
+    updatedAt: new Date(),
+  };
+
   try {
-    const query = await Model.findById(req.params.id);
+    const query = await Model.findOne({ _id: req.params.id, removed: false });
+
     if (!query) {
       return res.status(404).json({
         success: false,
         result: null,
-        message: 'Query not found',
+        message: 'Query not found or already removed',
       });
     }
 
-    // Dynamically apply validated updates
-    Object.entries(value).forEach(([key, val]) => {
+    // Update fields of the query
+    Object.entries(body).forEach(([key, val]) => {
       query[key] = val;
     });
 
     const updatedQuery = await query.save();
 
+    increaseBySettingKey({ settingKey: 'last_query_number' });
     return res.status(200).json({
       success: true,
       result: updatedQuery,
       message: 'Query updated successfully',
     });
+
   } catch (error) {
-    return res.status(400).json({
+    return res.status(500).json({
       success: false,
       result: null,
       message: 'Failed to update query',

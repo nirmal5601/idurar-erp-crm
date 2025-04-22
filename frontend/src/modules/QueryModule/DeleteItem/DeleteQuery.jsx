@@ -1,15 +1,15 @@
+import { useState } from 'react';
 import { Modal, Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { ExclamationCircleOutlined } from '@ant-design/icons';
 import { erp } from '@/redux/erp/actions';
 import useLanguage from '@/locale/useLanguage';
-import { useState } from 'react';
-import { ExclamationCircleOutlined } from '@ant-design/icons';
 
 export default function DeleteQuery({ id, entity = 'query' }) {
+  const navigate = useNavigate();
   const translate = useLanguage();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
   const showDeleteConfirm = () => {
@@ -19,10 +19,10 @@ export default function DeleteQuery({ id, entity = 'query' }) {
       okText: translate('Yes'),
       okType: 'danger',
       cancelText: translate('No'),
-      onOk: async () => {
+      onOk: () => {
         setLoading(true);
         try {
-          await dispatch(erp.delete({ entity, id }));
+          dispatch(erp.delete({ entity, id }));
           Modal.success({
             title: translate('Deleted'),
             content: translate('Query deleted successfully'),

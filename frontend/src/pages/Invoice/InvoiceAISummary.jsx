@@ -1,9 +1,9 @@
-import useLanguage from '@/locale/useLanguage';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router-dom';
 import AISummaryInvoiceModule from '@/modules/InvoiceModule/AISummaryInvoiceModule';
 import { erp } from '@/redux/erp/actions';
-import { useParams } from 'react-router-dom';
+import useLanguage from '@/locale/useLanguage';
 
 export default function InvoiceAISSummary() {
   const entity = 'invoice';
@@ -11,9 +11,6 @@ export default function InvoiceAISSummary() {
   const translate = useLanguage();
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(erp.aiSummary({ entity, id }));
-  }, [id, dispatch]);
   const Labels = {
     PANEL_TITLE: translate('invoice'),
     DATATABLE_TITLE: translate('invoice_list'),
@@ -25,5 +22,10 @@ export default function InvoiceAISSummary() {
     entity,
     ...Labels,
   };
+
+  useEffect(() => {
+    dispatch(erp.aiSummary({ entity, id }));
+  }, [id, dispatch]);
+
   return <AISummaryInvoiceModule config={configPage} />;
 }

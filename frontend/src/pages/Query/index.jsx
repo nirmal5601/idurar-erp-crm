@@ -1,12 +1,12 @@
 import dayjs from 'dayjs';
-import useLanguage from '@/locale/useLanguage';
-
-import { useMoney, useDate } from '@/settings';
-import QueryDataTableModule from '@/modules/QueryModule/QueryDataTableModule';
 import { Tag, Tooltip } from 'antd';
 
+import QueryDataTableModule from '@/modules/QueryModule/QueryDataTableModule';
+import useLanguage from '@/locale/useLanguage';
+import { useDate } from '@/settings';
 
-export default function Invoice() {
+
+export default function Query() {
   const translate = useLanguage();
   const { dateFormat } = useDate();
   const entity = 'query';
@@ -22,6 +22,7 @@ export default function Invoice() {
     displayLabels: ['name'],
     searchFields: 'name',
   };
+
   const dataTableColumns = [
     {
       title: translate('Customer Name'),
@@ -47,7 +48,7 @@ export default function Invoice() {
     {
       title: translate('Status'),
       dataIndex: 'status',
-       render: (status) => (
+      render: (status) => (
         <Tag color={statusColors[status] || 'gray'}>
           {status}
         </Tag>
@@ -92,6 +93,7 @@ export default function Invoice() {
     entity,
     ...Labels,
   };
+  
   const config = {
     ...configPage,
     dataTableColumns,

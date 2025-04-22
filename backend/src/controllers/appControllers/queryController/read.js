@@ -3,9 +3,10 @@ const Model = mongoose.model('Query');
 
 const read = async (req, res) => {
   try {
-    const result = await Model.findOne({ _id: req.params.id })
-      .populate('client') // full client info
-      .populate('createdBy', 'name') // just name of creator
+    console.log('triggered')
+    const result = await Model.findOne({ _id: req.params.id, removed: false })
+      .populate('client')
+      .populate('createdBy', 'name')
       .exec();
 
     if (!result) {

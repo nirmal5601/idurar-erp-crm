@@ -1,15 +1,14 @@
+import { useLayoutEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
 import NotFound from '@/components/NotFound';
+import PageLoader from '@/components/PageLoader';
 
 import { ErpLayout } from '@/layout';
 
-import PageLoader from '@/components/PageLoader';
-
 import { erp } from '@/redux/erp/actions';
-
 import { selectReadItem } from '@/redux/erp/selectors';
-import { useLayoutEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
 
 import QueryForm from '../Forms/QueryForm';
 import UpdateQuery from '../UpdateItem/UpdateQuery';
@@ -27,8 +26,7 @@ export default function UpdateQueryModule({ config }) {
 
   useLayoutEffect(() => {
     if (currentResult) {
-      const data = { ...currentResult };
-      dispatch(erp.currentAction({ actionType: 'update', data }));
+      dispatch(erp.currentAction({ actionType: 'update', data: currentResult }));
     }
   }, [currentResult]);
 

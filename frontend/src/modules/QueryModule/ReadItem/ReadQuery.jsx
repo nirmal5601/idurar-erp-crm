@@ -1,8 +1,8 @@
-import { PageHeader } from '@ant-design/pro-layout';
-import { Descriptions, Divider } from 'antd';
-import useLanguage from '@/locale/useLanguage';
-import dayjs from 'dayjs';
 import { useNavigate } from 'react-router-dom';
+import { Descriptions, Divider } from 'antd';
+import dayjs from 'dayjs';
+import { PageHeader } from '@ant-design/pro-layout';
+import useLanguage from '@/locale/useLanguage';
 
 export default function ReadQuery({ config, selectedItem }) {
   const translate = useLanguage();
@@ -15,7 +15,13 @@ export default function ReadQuery({ config, selectedItem }) {
     resolution,
     createdAt,
     client = {},
+    notes = [],
   } = selectedItem || {};
+
+  // Mapping notes to print them one after another with "Note1:", "Note2:", etc.
+  const notesContent = notes?.map((note, index) => (
+    <p key={index}><strong>{`Note ${index + 1}:`}</strong> {note.content}</p>
+  ));
 
   return (
     <>
@@ -48,7 +54,7 @@ export default function ReadQuery({ config, selectedItem }) {
         </Descriptions.Item>
       </Descriptions>
 
-      <Descriptions title={translate('Query Info')} bordered column={1}>
+      <Descriptions title={translate('Query Info')} bordered column={1} style={{ marginBottom: 32 }}>
         <Descriptions.Item label={translate('Status')}>
           {status || 'N/A'}
         </Descriptions.Item>
@@ -60,6 +66,12 @@ export default function ReadQuery({ config, selectedItem }) {
         </Descriptions.Item>
         <Descriptions.Item label={translate('Created At')}>
           {createdAt ? dayjs(createdAt).format('DD/MM/YYYY HH:mm') : 'N/A'}
+        </Descriptions.Item>
+      </Descriptions>
+
+      <Descriptions title={translate('Notes')} bordered column={1}>
+        <Descriptions.Item label={translate('Notes')}>
+          {notesContent.length > 0 ? notesContent : 'No notes available'}
         </Descriptions.Item>
       </Descriptions>
     </>
