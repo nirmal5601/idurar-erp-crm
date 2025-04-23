@@ -31,6 +31,15 @@ for (const filePath of modelsFiles) {
   require(path.resolve(filePath));
 }
 
+process.on('uncaughtException', (error) => {
+  console.error('Uncaught Exception ->', error.message);
+  console.error(error.stack);
+});
+
+process.on('unhandledRejection', (reason, promise) => {
+  console.error('Unhandled Rejection ->', reason);
+});
+
 // Start our app!
 const app = require('./app');
 app.set('port', process.env.PORT || 8888);
