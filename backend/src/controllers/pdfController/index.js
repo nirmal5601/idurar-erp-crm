@@ -59,7 +59,7 @@ exports.generatePdf = async (
 
       settings.public_server_file = process.env.PUBLIC_SERVER_FILE;
 
-      const htmlContent = pug.renderFile('src/pdf/' + modelName + '.pug', {
+      const htmlContent = pug.renderFile(`pdf/${modelName}.pug`, {
         model: result,
         settings,
         translate,
