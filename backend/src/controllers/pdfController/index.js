@@ -2,6 +2,7 @@ const pug = require('pug');
 const fs = require('fs');
 const moment = require('moment');
 let pdf = require('html-pdf');
+const phantomjs = require('phantomjs-prebuilt');  // Import phantomjs-prebuilt
 const { listAllSettings, loadSettings } = require('@/middlewares/settings');
 const { getData } = require('@/middlewares/serverData');
 const useLanguage = require('@/locale/useLanguage');
@@ -67,16 +68,17 @@ exports.generatePdf = async (
         moment: moment,
       });
 
-      pdf
-        .create(htmlContent, {
-          format: info.format,
-          orientation: 'portrait',
-          border: '10mm',
-        })
-        .toFile(targetLocation, function (error) {
-          if (error) throw new Error(error);
-          if (callback) callback();
-        });
+      const options = {
+        phantomPath: phantomjs.path,
+        format: info.format,
+        orientation: 'portrait',
+        border: '10mm',
+      };
+
+      pdf.create(htmlContent, options).toFile(targetLocation, function (error) {
+        if (error) throw new Error(error);
+        if (callback) callback();
+      });
     }
   } catch (error) {
     throw new Error(error);
