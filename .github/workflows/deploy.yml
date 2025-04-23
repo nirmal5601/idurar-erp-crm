@@ -43,10 +43,10 @@ jobs:
             # Clean up old Docker containers and images
             docker container prune -f
             docker image prune -a -f
- 
+            docker volume prune -f
             # Navigate to directory containing docker-compose.yml if not in root
             # cd deploy  # Uncomment and set correct path if needed
- 
+
             # Use Docker Compose to rebuild and restart
             docker compose down
             docker compose up --build -d
