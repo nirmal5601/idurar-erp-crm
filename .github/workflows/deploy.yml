@@ -27,6 +27,8 @@ jobs:
             #!/bin/bash
  
             APP_DIR="/home/ubuntu/my-app"
+            FRONTEND_DIR="$APP_DIR/frontend"
+            BACKEND_DIR="$APP_DIR/backend"
  
             # Remove the existing my-app directory if it exists
             if [ -d "$APP_DIR" ]; then
@@ -35,7 +37,7 @@ jobs:
             fi
  
             # Clone the specific branch directly into the app directory
-            git clone -b feature/gemini-integration https://github.com/nirmal5601/idurar-erp-crm.git $APP_DIR
+            git clone -b feature/gemini-integration https://github.com/BharathkumarRG/Test-Env.git $APP_DIR
  
             # Navigate to the app directory
             cd $APP_DIR
@@ -44,6 +46,19 @@ jobs:
             docker container prune -f
             docker image prune -a -f
             docker volume prune -f
+
+            echo "VITE_FILE_BASE_URL=${{ secrets.VITE_FILE_BASE_URL }}" > $FRONTEND_DIR/.env
+            echo "VITE_BACKEND_SERVER=${{ secrets.VITE_BACKEND_SERVER }}" >> $FRONTEND_DIR/.env
+            echo "PROD=${{ secrets.PROD }}" >> $FRONTEND_DIR/.env
+            # Create backend .env file from GitHub secrets
+            echo "DATABASE=${{ secrets.DATABASE }}" > $BACKEND_DIR/.env
+            echo "RESEND_API=${{ secrets.RESEND_API }}" >> $BACKEND_DIR/.env
+            echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" >> $BACKEND_DIR/.env
+            echo "API_URL=${{ secrets.API_URL }}" >> $BACKEND_DIR/.env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> $BACKEND_DIR/.env
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}" >> $BACKEND_DIR/.env
+            echo "OPENSSL_CONF=${{ secrets.OPENSSL_CONF }}" >> $BACKEND_DIR/.env
+            echo "PUBLIC_SERVER_FILE=${{ secrets.PUBLIC_SERVER_FILE }}" >> $BACKEND_DIR/.env
             # Navigate to directory containing docker-compose.yml if not in root
             # cd deploy  # Uncomment and set correct path if needed
 
