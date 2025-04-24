@@ -29,6 +29,10 @@ jobs:
             APP_DIR="/home/ubuntu/my-app"
             FRONTEND_DIR="$APP_DIR/frontend"
             BACKEND_DIR="$APP_DIR/backend"
+
+            sudo chown -R $USER:$USER $APP_DIR
+            sudo chmod -R 755 $APP_DIR
+
  
             # Remove the existing my-app directory if it exists
             if [ -d "$APP_DIR" ]; then
