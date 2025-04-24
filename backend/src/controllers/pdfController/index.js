@@ -2,7 +2,7 @@ const pug = require('pug');
 const fs = require('fs');
 const moment = require('moment');
 let pdf = require('html-pdf');
-// const phantomjs = require('phantomjs-prebuilt');  // Import phantomjs-prebuilt
+const path = require('path');
 const { listAllSettings, loadSettings } = require('@/middlewares/settings');
 const { getData } = require('@/middlewares/serverData');
 const useLanguage = require('@/locale/useLanguage');
@@ -59,8 +59,8 @@ exports.generatePdf = async (
 
       settings.public_server_file = process.env.PUBLIC_SERVER_FILE;
 
-      const filePath = `${__dirname}/pdf/${modelName}.pug`
-      console.log('test: ',filePath);
+      const filePath = `${__dirname}/pdf/${modelName}.pug`;
+      console.log('Rendering Pug template at:', filePath);
 
       const htmlContent = pug.renderFile(filePath, {
         model: result,
@@ -71,19 +71,28 @@ exports.generatePdf = async (
         moment: moment,
       });
 
+      // Resolve PhantomJS binary path explicitly
+      const phantomPath = '/app/node_modules/phantomjs-prebuilt/lib/phantom/bin/phantomjs';
+      console.log('Using PhantomJS binary at:', phantomPath);
+
+      // Set PhantomJS binary path explicitly in options
       const options = {
-        // phantomPath: phantomjs.path,
+        phantomPath: phantomPath, // comment this for running the download locally
         format: info.format,
         orientation: 'portrait',
         border: '10mm',
       };
 
       pdf.create(htmlContent, options).toFile(targetLocation, function (error) {
-        if (error) throw new Error(error);
+        if (error) {
+          console.error('Error generating PDF:', error);
+          throw new Error(error);
+        }
         if (callback) callback();
       });
     }
   } catch (error) {
+    console.error('Error in generatePdf function:', error);
     throw new Error(error);
   }
 };
