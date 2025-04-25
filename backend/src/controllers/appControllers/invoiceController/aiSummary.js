@@ -20,9 +20,15 @@ const findAIDocument = async (req, res) => {
         message: 'No document found',
       });
     }
-    const summary = await generateGeminiSummary(JSON.stringify(result.items));
-    const summarytext = summary?.candidates?.[0]?.content?.parts?.[0]?.text || "No summary available"
-    result.aiSummary = summarytext;
+    const notes = result.items.map(item => item.note);
+    const summaries = [];
+    for (let i = 0; i < notes.length; i++) {
+      const prompt = `Give me a detailed summary for the following note: ${notes[i]}`;
+      const summary = await generateGeminiSummary(prompt);
+      const summaryText = summary?.candidates?.[0]?.content?.parts?.[0]?.text || "No summary available";
+      summaries.push({ note: notes[i], summary: summaryText });
+    }
+    result.aiSummary = summaries;
     await result.save();
 
     return res.status(200).json({
